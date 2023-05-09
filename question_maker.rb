@@ -7,6 +7,7 @@
 
 require 'net/http'
 require 'uri' 
+require 'JSON'
 
 class QuestionMaker
   def input_json
