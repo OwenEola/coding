@@ -1,5 +1,6 @@
 require 'pry'
 require './database_connection'
+require './player'
 
 class Game
   def initialize(questions)
@@ -52,10 +53,11 @@ class Game
       end
     end
 
+    Player.create(@name, @score)
+    
     # Store the player's name & score in the database
-     db = DatabaseConnection.new
-      db.execute("INSERT INTO players (name, score)
-              VALUES (?, ?)", [@name, @score])
+    #DatabaseConnection.run_sql("INSERT INTO players (name, score)
+     #                         VALUES (?, ?)", [@name, @score])
       #binding.pry 
       #db.execute( "select * from players" ) do |row| p row end
   end
