@@ -1,7 +1,7 @@
 require 'sqlite3'
 
 class DatabaseConnection
-  def initialize
+  def self.database_instance
     @db = SQLite3::Database.new "my_database.db"
 
     # Create the players table if it doesn't exist
@@ -13,9 +13,10 @@ class DatabaseConnection
         score int(5)
       );
     SQL
+    @db
   end
 
-  def execute(sql, params = [])
-    @db.execute(sql, params)
+  def self.run_sql(sql, params = [])
+    database_instance.execute(sql, params)
   end
 end

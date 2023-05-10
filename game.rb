@@ -56,7 +56,7 @@ class Game
      db = DatabaseConnection.new
       db.execute("INSERT INTO players (name, score)
               VALUES (?, ?)", [@name, @score])
-      binding.pry 
+      #binding.pry 
       #db.execute( "select * from players" ) do |row| p row end
   end
 end
