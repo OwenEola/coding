@@ -10,7 +10,8 @@ class DatabaseConnection
         id INTEGER PRIMARY KEY,
         created_at datetime default current_timestamp,
         name varchar(50),
-        score int(5)
+        email varchar(100) unique,
+        score int
       );
     SQL
     @db

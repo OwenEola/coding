@@ -1,8 +1,10 @@
 require 'pry'
 require './database_connection'
 require './player'
+#require './intro'
 
 class Game
+  #Everytime .new is called on Game method this resets the score etc
   def initialize(questions)
     @score = 0
     @questions = questions
@@ -10,16 +12,23 @@ class Game
     @end_time = nil
   end
 
-  def scoreboard
+  #
+  def result
     "You got #{@score}/#{@questions.length}"
   end
 
+  #Want to move this out to intro.rb, got that file which I've done some stuff to create a menu system
   def intro
     puts '(intro music)'
     puts
     puts 'What is your name: '
     @name = gets.chomp
     puts
+    puts 'What is your email: '
+    @email = gets.chomp
+    puts
+    #Creates player
+    Player.create(@name, @email)
     puts "Welcome #{@name}, the game is Who Wants to be a Millionaire. For each question you get right you move onto the next question. If you get a question wrong, it is GAME OVER !"
     puts
     puts '(intense music plays)'
@@ -28,22 +37,23 @@ class Game
     puts "Let's get started!"
     puts
   end
+   
 
   def play
+    #Calls intro method, once handled in separate file need to remove comment from require !don't forget!
     intro
-    # Initialize the game loop
+    #Initialize the game loop
     game_over = false
     current_question = 0
-
     until game_over
       if @questions[current_question].ask
         puts 'Correct! Moving on to the next question.'
         @score += 1
         current_question += 1
-        puts scoreboard
+        puts result
         puts
       else
-        puts "Incorrect #{scoreboard}. Sorry, you have lost the game."
+        puts "Incorrect #{result}. Sorry, you have lost the game."
         game_over = true
       end
       # Check if the player has won
@@ -53,13 +63,8 @@ class Game
       end
     end
 
-    Player.create(@name, @score)
-    
-    # Store the player's name & score in the database
-    #DatabaseConnection.run_sql("INSERT INTO players (name, score)
-     #                         VALUES (?, ?)", [@name, @score])
-      #binding.pry 
-      #db.execute( "select * from players" ) do |row| p row end
+    #Updates player score
+    Player.update(@email, @score)
+
   end
 end
-
