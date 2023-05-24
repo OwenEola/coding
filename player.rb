@@ -1,33 +1,29 @@
 require "pry"
-require "./database_connection"
+require "./database_model"
 
-class Player 
+class Player < DatabaseModel
   
   #Method to create new player in table
   #Need to add a check here to seach if email is already used, maybe like if statement on table?
   def self.create(name, email)
-    DatabaseConnection.run_sql("INSERT INTO players (name, email)
-                                VALUES (?, ?)", [name, email])
+    (name: name, email: email)
   end
 
   #Method to update player who has previously played
   def self.update(email, score)
-    DatabaseConnection.run_sql("UPDATE players SET score = ? WHERE email = ?", [score, email])  
+    player = find_by_email(email)
+    (id: player[:id], score: score)
   end
 
   #Method to fetch all rows from players table
   def self.list
-    DatabaseConnection.run_sql( "select * from players" ) do |row| 
-      p row 
-    end
-  end 
+    all
+  end
 
   #Method to display scoreboard, name and score from players table
   def self.scoreboard
-    DatabaseConnection.run_sql( "SELECT name, score  FROM players" ) do |row| 
-      p row 
-    end
-  end 
+    database.execute("SELECT name, score  FROM players")
+  end
 
 end
 

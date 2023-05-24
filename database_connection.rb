@@ -1,8 +1,8 @@
 require 'sqlite3'
 
 class DatabaseConnection
-  def self.database_instance
-    @db = SQLite3::Database.new "my_database.db"
+  def self.database
+    @database ||= SQLite3::Database.new("my_database.db")
 
     # Create the players table if it doesn't exist
     @db.execute <<-SQL
@@ -20,4 +20,4 @@ class DatabaseConnection
   def self.run_sql(sql, params = [])
     database_instance.execute(sql, params)
   end
-end
+end 
